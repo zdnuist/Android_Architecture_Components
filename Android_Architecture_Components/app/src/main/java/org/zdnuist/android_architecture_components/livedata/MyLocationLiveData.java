@@ -4,6 +4,7 @@ import android.Manifest.permission;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.support.annotation.MainThread;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import com.amap.api.location.AMapLocation;
@@ -21,6 +22,7 @@ public class MyLocationLiveData extends LiveData<AMapLocation> {
 
   private final static String TAG = "MyLocationLiveData";
 
+  private static MyLocationLiveData sInstance;
 
   private Context context;
 
@@ -29,8 +31,16 @@ public class MyLocationLiveData extends LiveData<AMapLocation> {
   private AMapLocationClientOption locationOption = null;
 
 
-  public MyLocationLiveData(Context context) {
+  private MyLocationLiveData(Context context) {
     this.context = context;
+  }
+
+  @MainThread
+  public static MyLocationLiveData get(Context context) {
+    if (sInstance == null) {
+      sInstance = new MyLocationLiveData(context.getApplicationContext());
+    }
+    return sInstance;
   }
 
   @Override
@@ -134,7 +144,7 @@ public class MyLocationLiveData extends LiveData<AMapLocation> {
         String result = sb.toString();
 
         setValue(location);
-        Log.i(TAG,"location_ret:" + result);
+//        Log.i(TAG,"location_ret:" + result);
       } else {
       }
     }

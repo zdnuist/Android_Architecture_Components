@@ -3,15 +3,18 @@ package org.zdnuist.android_architecture_components;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.arch.lifecycle.Observer;
-import android.location.Location;
+import android.arch.lifecycle.ViewModelProviders;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import com.amap.api.location.AMapLocation;
+import java.util.List;
 import org.zdnuist.android_architecture_components.listener.MyListener;
 import org.zdnuist.android_architecture_components.livedata.MyLocationLiveData;
+import org.zdnuist.android_architecture_components.model.User;
+import org.zdnuist.android_architecture_components.viewmodel.MyViewModel;
 
 public class MainActivity extends AppCompatActivity implements LifecycleRegistryOwner{
 
@@ -19,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleRegistry
 
   private LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
 
-  private TextView mTextView;
+  private TextView mTextView,mTextView2;
 
   private MyListener myListener;
 
@@ -31,10 +34,12 @@ public class MainActivity extends AppCompatActivity implements LifecycleRegistry
     setContentView(R.layout.activity_main);
 
     mTextView = (TextView) findViewById(R.id.id_tv);
+    mTextView2 = (TextView) findViewById(R.id.id_tv_2);
+    mTextView2.setText("Main");
 
     myListener = new MyListener(this,getLifecycle());
 
-    myLocationLiveData = new MyLocationLiveData(this);
+    myLocationLiveData = MyLocationLiveData.get(this);
     myLocationLiveData.observe(this, new Observer<AMapLocation>() {
       @Override
       public void onChanged(@Nullable AMapLocation location) {
@@ -42,6 +47,16 @@ public class MainActivity extends AppCompatActivity implements LifecycleRegistry
         mTextView.setText(location.toStr());
       }
     });
+
+    MyViewModel myViewModel = ViewModelProviders.of(this).get(MyViewModel.class);
+    myViewModel.getUsers().observe(this, new Observer<List<User>>() {
+      @Override
+      public void onChanged(@Nullable List<User> users) {
+        Log.i(TAG,"size:" + users.size());
+        mTextView2.setText(users.size()+"");
+      }
+    });
+
   }
 
   @Override
