@@ -32,5 +32,17 @@
     app:layout_constraintTop_toBottomOf="@+id/id_tv"
     tools:layout_constraintLeft_creator="1"
     app:layout_constraintLeft_toLeftOf="@+id/id_tv"/>
+  <Button
+    android:id="@+id/id_btn_1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Jump to database view"
+    tools:layout_constraintTop_creator="1"
+    tools:layout_constraintRight_creator="1"
+    app:layout_constraintRight_toRightOf="parent"
+    tools:layout_constraintLeft_creator="1"
+    app:layout_constraintLeft_toLeftOf="parent"
+    android:layout_marginTop="55dp"
+    app:layout_constraintTop_toBottomOf="@+id/id_tv_2"/>
 
 </android.support.constraint.ConstraintLayout>
